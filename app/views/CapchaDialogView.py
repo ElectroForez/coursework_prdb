@@ -30,6 +30,7 @@ class CapchaDialogView(QWidget):
         self._model.capcha_changed.connect(self.draw_capcha)
         self._ui.confirm_button.clicked\
             .connect(lambda: self._controller.check_capcha(self._ui.capcha_edit.text()))
+        self._ui.download_pdf_btn.clicked.connect(self._controller.download_capcha)
         pass
 
     def init_data(self):
