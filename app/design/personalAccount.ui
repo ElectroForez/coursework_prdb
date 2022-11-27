@@ -123,9 +123,23 @@ background-color: rgb(38, 162, 105);</string>
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="add_good_btn">
+      <property name="text">
+       <string>Добавить товар</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPushButton" name="create_order_btn">
       <property name="text">
        <string>Создать заказ</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="close_order_btn">
+      <property name="text">
+       <string>Закрыть заказ</string>
       </property>
      </widget>
     </item>

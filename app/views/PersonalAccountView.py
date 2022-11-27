@@ -26,6 +26,7 @@ class PersonalAccountView(QMainWindow):
         self._ui.create_order_btn.clicked.connect(self._controller.create_order)
         self._ui.deauth_btn.triggered.connect(self._controller.deauth)
         self._ui.exit_btn.triggered.connect(self._controller.close)
+        # self._ui.create_order_btn.clicked.connect(self._controller)
 
     def init_data(self):
         fio = self._model.user['ФИО']

@@ -9,10 +9,21 @@ class CreateOrderModel(QObject):
     order_exists = pyqtSignal(bool)
     order_created = pyqtSignal(str)
     order_empty = pyqtSignal()
+    cart_changed = pyqtSignal()
 
     def __init__(self):
         super().__init__()
         self._cur_order = self.get_last_order_id() + 1
+        self._cart = []
+
+    @property
+    def cart(self):
+        return self._cart
+
+    @cart.setter
+    def cart(self, value):
+        self._cart = value
+        self.cart_changed.emit()
 
     @property
     def cur_order(self):
@@ -43,3 +54,17 @@ class CreateOrderModel(QObject):
         print(f'Сделали заказ с номером {id}')
         self.order_created.emit(id)
         return 1
+
+    def get_good_by_id(self, good_id):
+        db.cursor.execute(f'select * '
+                               f'from товары '
+                               f'WHERE '
+                               f'"Код товара" = {good_id}'
+                               )
+        result = db.cursor.fetchone()
+        return result
+
+    def get_clients(self):
+        db.cursor.execute(f'select * from клиенты')
+        result = db.cursor.fetchall()
+        return result

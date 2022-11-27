@@ -1,6 +1,9 @@
-from PyQt5.QtCore import pyqtSlot, QRegExp, Qt
-from PyQt5.QtGui import QPixmap, QRegExpValidator
-from PyQt5.QtWidgets import QMainWindow, QLineEdit, QPushButton, QWidget, QMessageBox
+import sys
+from random import randint
+
+from PyQt5.QtCore import pyqtSlot, QRegExp, Qt, QPoint
+from PyQt5.QtGui import QPixmap, QRegExpValidator, QColor, QPainter, QFont
+from PyQt5.QtWidgets import QMainWindow, QLineEdit, QPushButton, QWidget, QMessageBox, QApplication
 
 from models.CreateOrderModel import CreateOrderModel
 from views.createOrderDesign import Ui_Form
@@ -30,12 +33,17 @@ class CreateOrderView(QWidget):
             .connect(lambda: self._controller.create_order(self._ui.order_id_edit.text()))
         self._model.order_created.connect(self.on_create_order)
         self._model.order_empty.connect(self.on_order_empty)
+        self._model.cart_changed.connect(self.on_cart_changed)
+        self._ui.add_goods.clicked.connect(self._controller.add_goods)
 
     def init_data(self):
         stu_id_regx = QRegExp('^[0-9]{10}$')
         stu_id_validator = QRegExpValidator(stu_id_regx, self._ui.order_id_edit)
         self._ui.order_id_edit.setValidator(stu_id_validator)
         self._ui.order_id_edit.setText(str(self._model.cur_order))
+
+        for client in self._model.get_clients():
+            self._ui.client_box.addItem(client['ФИО'])
 
     @pyqtSlot(bool)
     def on_order_exists(self, order_exists):
@@ -57,3 +65,12 @@ class CreateOrderView(QWidget):
         msg_box.setText(f"Заказ с номером {value} сформирован (Типа)")
         msg_box.setWindowTitle("Успешно")
         msg_box.exec()
+
+    @pyqtSlot()
+    def on_cart_changed(self):
+        text = "Список:\n" if len(self._model.cart) else "Список пуст"
+
+        for good_id in self._model.cart:
+            text += self._model.get_good_by_id(good_id)['Наименование'] + "\n"
+
+        self._ui.goods_label.setText(text)
