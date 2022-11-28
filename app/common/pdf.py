@@ -12,9 +12,9 @@ def print_widget(widget, filename):
     xscale = printer.pageRect().width() * 1.0 / widget.width()
     yscale = printer.pageRect().height() * 1.0 / widget.height()
     scale = min(xscale, yscale)
-    painter.translate(printer.paperRect().center())
+    # painter.translate(printer.paperRect().center())
     painter.scale(scale, scale)
-    painter.translate(-widget.width() / 2, -widget.height() / 2)
+    # painter.translate(-widget.width() / 2, -widget.height() / 2)
     # end scale
 
     widget.render(painter)

@@ -52,7 +52,7 @@ class CloseOrderView(QWidget):
 
     @pyqtSlot()
     def on_order_empty(self):
-        self._ui.info_label.setText("Введите номер заказа")
+        self._ui.info_label.setText("")
         self._ui.close_order_btn.setDisabled(True)
 
     @pyqtSlot()

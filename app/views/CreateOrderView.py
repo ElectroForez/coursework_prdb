@@ -1,16 +1,19 @@
+import os.path
 import sys
 from random import randint
 
+from PyQt5 import QtPrintSupport
 from PyQt5.QtCore import pyqtSlot, QRegExp, Qt, QPoint
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QColor, QPainter, QFont
-from PyQt5.QtWidgets import QMainWindow, QLineEdit, QPushButton, QWidget, QMessageBox, QApplication, QTableWidgetItem
+from PyQt5.QtWidgets import QMainWindow, QLineEdit, QPushButton, QWidget, QMessageBox, QApplication, QTableWidgetItem, \
+    QLabel, QTableWidget
 
 from models.CreateOrderModel import CreateOrderModel
 from views.createOrderDesign import Ui_Form
 from models.PersonalAccountModel import PersonalAccountModel
 
 from controllers.CreateOrderController import CreateOrderController
-
+from common.pdf import print_widget
 
 class CreateOrderView(QWidget):
 
@@ -73,6 +76,7 @@ class CreateOrderView(QWidget):
 
     @pyqtSlot(int)
     def on_created_order(self, order_id):
+        self.print_pdf()
         msg_box = QMessageBox()
         msg_box.setText(f"Заказ с номером {order_id} сформирован")
         msg_box.setWindowTitle("Успешно")
@@ -102,3 +106,25 @@ class CreateOrderView(QWidget):
         self._ui.total_value_lbl.setText(str(total_sum) + " руб.")
         # table.resizeColumnsToContents()
         table.setSortingEnabled(True)
+
+    def print_pdf(self):
+        text = f"""
+Номер заказа: {self._ui.order_id_edit.text()}
+Клиент: {self._ui.client_box.currentText()}
+Количество часов проката: {self._ui.hours_count_box.text()}
+        
+Список товаров:
+        
+"""
+        cart = self._model.cart
+        cart_text = ""
+        for good_id in cart:
+            good = self._model.get_good_by_id(good_id)
+            cart_text += f"{good['Наименование']}, {good['Стоимость, руб. за час']} руб.)\n"
+        text += cart_text
+
+        text += f"Итого: {self._ui.total_value_lbl.text()}"
+        text = text.replace('\n', '\n    ')
+        label = QLabel(text)
+        label.setStyleSheet('background-color: #FFF')
+        print_widget(label, os.path.join('../res/reports/', f'{self._ui.order_id_edit.text()}.pdf'))
