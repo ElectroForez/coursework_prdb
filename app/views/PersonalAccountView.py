@@ -44,5 +44,8 @@ class PersonalAccountView(QMainWindow):
         if position != 'Администратор':
             self._ui.see_history.hide()
         else:
-            # self._ui.create_order_btn.hide()
-            pass
+            self._ui.create_order_btn.hide()
+            self._ui.close_order_btn.hide()
+
+        if position != 'Менеджер':
+            self._ui.add_good_btn.hide()
