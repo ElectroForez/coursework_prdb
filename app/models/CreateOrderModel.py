@@ -1,3 +1,5 @@
+import datetime
+
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
 
 from models.Db import db
@@ -7,14 +9,15 @@ class CreateOrderModel(QObject):
 
     order_changed = pyqtSignal(int)
     order_exists = pyqtSignal(bool)
-    order_created = pyqtSignal(str)
+    order_create = pyqtSignal(int)
     order_empty = pyqtSignal()
     cart_changed = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, cur_employer=None):
         super().__init__()
         self._cur_order = self.get_last_order_id() + 1
         self._cart = []
+        self.cur_employer = cur_employer
 
     @property
     def cart(self):
@@ -50,11 +53,6 @@ class CreateOrderModel(QObject):
         result = db.cursor.fetchone()
         return result
 
-    def create_order(self, id):
-        print(f'Сделали заказ с номером {id}')
-        self.order_created.emit(id)
-        return 1
-
     def get_good_by_id(self, good_id):
         db.cursor.execute(f'select * '
                                f'from товары '
@@ -68,3 +66,50 @@ class CreateOrderModel(QObject):
         db.cursor.execute(f'select * from клиенты')
         result = db.cursor.fetchall()
         return result
+
+    def get_client_by_fullname(self, fullname):
+        db.cursor.execute(f'select * from клиенты '
+                          f'WHERE "ФИО" = \'{fullname}\'')
+        result = db.cursor.fetchone()
+        return result
+
+    def create_order(self, order):
+        if not len(order['cart']):
+            return
+
+        order['date_created'] = datetime.date.today()
+        order['time_created'] = datetime.datetime.now().time()
+        order['client_id'] = self.get_client_by_fullname(order['client_fullname'])['Код клиента']
+        order['status'] = 'В прокате'
+        order['employer_id'] = self.cur_employer["Код сотрудника"]
+
+        db.cursor.execute(f'insert into заказы '
+                          f'('
+                          f'"Код заказа", '
+                          f'"Дата создания", '
+                          f'"Время заказа", '
+                          f'"Код клиента", '
+                          f'"Статус", '
+                          f'"Время проката", '
+                          f'"Код сотрудника"'
+                          f')'
+                          f'VALUES '
+                          f'('
+                          f'%s, %s, %s, %s, %s, %s, %s'
+                          f')',
+                          (
+                          order['id'],
+                          order['date_created'],
+                          order['time_created'],
+                          order['client_id'],
+                          order['status'],
+                          order['arenda_hours'],
+                          order['employer_id'],
+                          )
+        )
+
+        for good_id in order['cart']:
+            db.cursor.execute("INSERT INTO заказы_товары "
+                              "VALUES (%s, %s)", (order['id'], good_id))
+
+        self.order_create.emit(order['id'])

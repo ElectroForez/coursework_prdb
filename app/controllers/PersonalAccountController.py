@@ -23,7 +23,7 @@ class PersonalAccountController(QObject):
 
     @pyqtSlot()
     def create_order(self):
-        model = CreateOrderModel()
+        model = CreateOrderModel(self._model.user)
         view = CreateOrderView(model, self._view)
         view.show()
 

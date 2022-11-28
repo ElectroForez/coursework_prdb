@@ -17,9 +17,13 @@ class CreateOrderController(QObject):
     def change_order_id(self, id):
         self._model.cur_order = id
 
-    @pyqtSlot(str)
-    def create_order(self, id):
-        self._model.create_order(id)
+    @pyqtSlot(dict)
+    def create_order(self, order):
+        self._model.create_order(order)
+
+    @pyqtSlot()
+    def success_create_order(self):
+        self._view.close()
 
     @pyqtSlot()
     def add_goods(self):

@@ -30,8 +30,8 @@ class CreateOrderView(QWidget):
         self._model.order_exists.connect(self.on_order_exists)
         self._ui.order_id_edit.textChanged.connect(self._controller.change_order_id)
         self._ui.create_order_btn.clicked\
-            .connect(lambda: self._controller.create_order(self._ui.order_id_edit.text()))
-        self._model.order_created.connect(self.on_create_order)
+            .connect(self.on_create_order)
+        self._model.order_create.connect(self.on_created_order)
         self._model.order_empty.connect(self.on_order_empty)
         self._model.cart_changed.connect(self.on_order_changed)
         self._ui.add_goods.clicked.connect(self._controller.add_goods)
@@ -45,6 +45,8 @@ class CreateOrderView(QWidget):
 
         for client in self._model.get_clients():
             self._ui.client_box.addItem(client['ФИО'])
+
+        self.draw_list()
 
     @pyqtSlot(bool)
     def on_order_exists(self, order_exists):
@@ -60,12 +62,22 @@ class CreateOrderView(QWidget):
         self._ui.info_label.setText("Введите номер заказа")
         self._ui.create_order_btn.setDisabled(True)
 
-    @pyqtSlot(str)
-    def on_create_order(self, value):
+    @pyqtSlot()
+    def on_create_order(self):
+        order = dict()
+        order['id'] = int(self._ui.order_id_edit.text())
+        order['arenda_hours'] = int(self._ui.hours_count_box.text().split()[0])
+        order['client_fullname'] = self._ui.client_box.currentText()
+        order['cart'] = self._model.cart
+        self._controller.create_order(order)
+
+    @pyqtSlot(int)
+    def on_created_order(self, order_id):
         msg_box = QMessageBox()
-        msg_box.setText(f"Заказ с номером {value} сформирован (Типа)")
+        msg_box.setText(f"Заказ с номером {order_id} сформирован")
         msg_box.setWindowTitle("Успешно")
         msg_box.exec()
+        self._controller.success_create_order()
 
     @pyqtSlot()
     def on_order_changed(self):
@@ -87,6 +99,6 @@ class CreateOrderView(QWidget):
             total_sum += s
             table.setItem(i, 2, QTableWidgetItem(str(s)))
 
-        self._ui.total_value_lbl.setText(str(total_sum))
+        self._ui.total_value_lbl.setText(str(total_sum) + " руб.")
         # table.resizeColumnsToContents()
         table.setSortingEnabled(True)

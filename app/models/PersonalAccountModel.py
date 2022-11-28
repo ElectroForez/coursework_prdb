@@ -11,7 +11,6 @@ class PersonalAccountModel(QObject):
         super().__init__()
         self._user_model = UserModel()
         self._cur_user = user
-        print(user)
 
     @property
     def user(self):
