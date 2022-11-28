@@ -23,13 +23,24 @@ class GoodsModel(QObject):
 
         self.createOrderModel = create_order_model
 
-    def add_to_cart(self, good):
-        if good not in self._cart:
-            self._cart.append(good)
+    def add_to_cart(self, good_id):
+        good = self.get_good_by_id(good_id)
+
+        if good_id not in self._cart:
+            if not good["Оставшееся кол-во"]:
+                return
+            self._cart.append(good_id)
+            self.db.cursor.execute(f'UPDATE товары '
+                                   f'SET "Оставшееся кол-во" = "Оставшееся кол-во" - 1 '
+                                   f'WHERE "Код товара" = {good_id}')
         else:
-            self._cart.remove(good)
+            self._cart.remove(good_id)
+            self.db.cursor.execute(f'UPDATE товары '
+                                   f'SET "Оставшееся кол-во" = "Оставшееся кол-во" + 1 '
+                                   f'WHERE "Код товара" = {good_id}')
+        self.db.connection.commit()
+        self.goods = self.get_goods()
         self.cart_changed.emit()
-        self.goods_changed.emit()
 
     @property
     def cart(self):

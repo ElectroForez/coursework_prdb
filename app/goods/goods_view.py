@@ -85,7 +85,7 @@ class GoodsView(QWidget):
         add_to_cart_text = "Добавлено" if good["Код товара"] in self._model.cart else "Добавить в заказ"
 
         add_to_cart = QPushButton(add_to_cart_text)
-        add_to_cart.clicked.connect(lambda: self._model.add_to_cart(good["Код товара"]))
+        add_to_cart.clicked.connect(lambda: self._controller.add_good(good["Код товара"]))
         layout.addWidget(add_to_cart)
         widget.setLayout(layout)
         widget.setStyleSheet("background-color: white; color: black;")

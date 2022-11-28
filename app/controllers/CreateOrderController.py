@@ -5,6 +5,7 @@ from models.CreateOrderModel import CreateOrderModel
 from goods.goods_view import GoodsView
 from goods.goods_model import GoodsModel
 
+
 class CreateOrderController(QObject):
     def __init__(self, view, model: CreateOrderModel):
         super().__init__()

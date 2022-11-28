@@ -51,6 +51,10 @@ class GoodsController(QObject):
     def good_name_change(self, value):
         self._model.filter_good_name = value
 
+    @pyqtSlot(int)
+    def add_good(self, value):
+        self._model.add_to_cart(value)
+
     @pyqtSlot()
     def complete(self):
         self._model.createOrderModel.cart = self._model.cart

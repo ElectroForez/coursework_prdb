@@ -124,11 +124,65 @@ color: rgb(0, 0, 0);</string>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="goods_label">
-     <property name="text">
-      <string/>
+    <widget class="QTableWidget" name="goods_table">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>63</number>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>128</number>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>26</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Наименование</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Руб. за час</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Сумма</string>
+      </property>
+     </column>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="goods_label">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Итого:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="total_value_lbl">
+       <property name="text">
+        <string>Значение</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <spacer name="verticalSpacer">

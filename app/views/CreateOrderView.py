@@ -3,7 +3,7 @@ from random import randint
 
 from PyQt5.QtCore import pyqtSlot, QRegExp, Qt, QPoint
 from PyQt5.QtGui import QPixmap, QRegExpValidator, QColor, QPainter, QFont
-from PyQt5.QtWidgets import QMainWindow, QLineEdit, QPushButton, QWidget, QMessageBox, QApplication
+from PyQt5.QtWidgets import QMainWindow, QLineEdit, QPushButton, QWidget, QMessageBox, QApplication, QTableWidgetItem
 
 from models.CreateOrderModel import CreateOrderModel
 from views.createOrderDesign import Ui_Form
@@ -33,8 +33,9 @@ class CreateOrderView(QWidget):
             .connect(lambda: self._controller.create_order(self._ui.order_id_edit.text()))
         self._model.order_created.connect(self.on_create_order)
         self._model.order_empty.connect(self.on_order_empty)
-        self._model.cart_changed.connect(self.on_cart_changed)
+        self._model.cart_changed.connect(self.on_order_changed)
         self._ui.add_goods.clicked.connect(self._controller.add_goods)
+        self._ui.hours_count_box.textChanged.connect(self.on_order_changed)
 
     def init_data(self):
         stu_id_regx = QRegExp('^[0-9]{10}$')
@@ -67,10 +68,25 @@ class CreateOrderView(QWidget):
         msg_box.exec()
 
     @pyqtSlot()
-    def on_cart_changed(self):
-        text = "Список:\n" if len(self._model.cart) else "Список пуст"
+    def on_order_changed(self):
+        self.draw_list()
 
-        for good_id in self._model.cart:
-            text += self._model.get_good_by_id(good_id)['Наименование'] + "\n"
+    def draw_list(self):
+        cart = self._model.cart
+        table = self._ui.goods_table
+        table.clearContents()
 
-        self._ui.goods_label.setText(text)
+        table.setRowCount(len(cart))
+
+        total_sum = 0
+        for i in range(len(cart)):
+            good = self._model.get_good_by_id(cart[i])
+            table.setItem(i, 0, QTableWidgetItem(str(good['Наименование'])))
+            table.setItem(i, 1, QTableWidgetItem(str(good['Стоимость, руб. за час'])))
+            s = good['Стоимость, руб. за час'] * int(self._ui.hours_count_box.text().split()[0])
+            total_sum += s
+            table.setItem(i, 2, QTableWidgetItem(str(s)))
+
+        self._ui.total_value_lbl.setText(str(total_sum))
+        # table.resizeColumnsToContents()
+        table.setSortingEnabled(True)
