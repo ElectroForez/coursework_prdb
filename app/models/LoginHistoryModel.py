@@ -8,6 +8,7 @@ class LoginHistoryModel(QObject):
 
     def __init__(self):
         super().__init__()
+        self.db = db
         self._history = self.get_history_from_db()
 
     @property
@@ -21,11 +22,11 @@ class LoginHistoryModel(QObject):
 
     def get_history_from_db(self):
         db.cursor.execute("SELECT * FROM история_входа")
-        result = db.cursor.fetchall()
+        result = self.db.cursor.fetchall()
         return result
 
     def get_history_by_login(self, login):
         db.cursor.execute("SELECT * FROM история_входа "
                           f"WHERE Логин LIKE '%{login}%'")
-        result = db.cursor.fetchall()
+        result = self.db.cursor.fetchall()
         return result
