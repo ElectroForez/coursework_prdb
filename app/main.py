@@ -2,7 +2,6 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 from models.AuthorizeModel import AuthorizeModel
-from controllers.AuthorizeController import AuthorizeController
 from views.AuthorizeView import AuthorizeView
 
 
