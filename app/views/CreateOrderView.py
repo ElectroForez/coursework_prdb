@@ -15,6 +15,7 @@ from models.PersonalAccountModel import PersonalAccountModel
 from controllers.CreateOrderController import CreateOrderController
 from common.pdf import print_widget
 
+
 class CreateOrderView(QWidget):
 
     def __init__(self, model: CreateOrderModel, parent=None):
@@ -47,7 +48,7 @@ class CreateOrderView(QWidget):
         self._ui.order_id_edit.setText(str(self._model.cur_order))
 
         for client in self._model.get_clients():
-            self._ui.client_box.addItem(client['ФИО'])
+            self._ui.client_box.addItem(client['fullname'])
 
         self.draw_list()
 
@@ -97,9 +98,9 @@ class CreateOrderView(QWidget):
         total_sum = 0
         for i in range(len(cart)):
             good = self._model.get_good_by_id(cart[i])
-            table.setItem(i, 0, QTableWidgetItem(str(good['Наименование'])))
-            table.setItem(i, 1, QTableWidgetItem(str(good['Стоимость, руб. за час'])))
-            s = good['Стоимость, руб. за час'] * int(self._ui.hours_count_box.text().split()[0])
+            table.setItem(i, 0, QTableWidgetItem(str(good['title'])))
+            table.setItem(i, 1, QTableWidgetItem(str(good['cost_per_hour'])))
+            s = good['cost_per_hour'] * int(self._ui.hours_count_box.text().split()[0])
             total_sum += s
             table.setItem(i, 2, QTableWidgetItem(str(s)))
 
@@ -120,7 +121,7 @@ class CreateOrderView(QWidget):
         cart_text = ""
         for good_id in cart:
             good = self._model.get_good_by_id(good_id)
-            cart_text += f"{good['Наименование']}, {good['Стоимость, руб. за час']} руб.)\n"
+            cart_text += f"{good['title']}, {good['cost_per_hour']} руб.)\n"
         text += cart_text
 
         text += f"Итого: {self._ui.total_value_lbl.text()}"

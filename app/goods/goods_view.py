@@ -65,11 +65,11 @@ class GoodsView(QWidget):
         widget.setMaximumSize(270, 270)
 
         layout = QVBoxLayout()
-        layout.addWidget(QLabel(good["Наименование"]))
+        layout.addWidget(QLabel(good["title"]))
 
         photo_label = QLabel()
-        if good["Изображение"]:
-            photo = QPixmap(os.path.join("img", good["Изображение"]))
+        if good["img"]:
+            photo = QPixmap(os.path.join("img", good["img"]))
             photo.scaled(150, 50, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             photo_label.setPixmap(photo)
         else:
@@ -78,14 +78,14 @@ class GoodsView(QWidget):
         photo_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(photo_label)
 
-        layout.addWidget(self.get_property_layout("Руб/час", good["Стоимость, руб. за час"]))
-        layout.addWidget(self.get_property_layout("Осталось", good["Оставшееся кол-во"]))
-        layout.addWidget(self.get_property_layout("Категория", good["Категория"]))
+        layout.addWidget(self.get_property_layout("Руб/час", good["cost_per_hour"]))
+        layout.addWidget(self.get_property_layout("Осталось", good["remaining_amount"]))
+        layout.addWidget(self.get_property_layout("Категория", good["category"]))
 
-        add_to_cart_text = "Добавлено" if good["Код товара"] in self._model.cart else "Добавить в заказ"
+        add_to_cart_text = "Добавлено" if good["id"] in self._model.cart else "Добавить в заказ"
 
         add_to_cart = QPushButton(add_to_cart_text)
-        add_to_cart.clicked.connect(lambda: self._controller.add_good(good["Код товара"]))
+        add_to_cart.clicked.connect(lambda: self._controller.add_good(good["id"]))
         layout.addWidget(add_to_cart)
         widget.setLayout(layout)
         widget.setStyleSheet("background-color: white; color: black;")
@@ -107,19 +107,7 @@ class GoodsView(QWidget):
         text = "Список:\n" if len(self._model.cart) else "Список пуст"
 
         for good_id in self._model.cart:
-            text += self._model.get_good_by_id(good_id)['Наименование'] + "\n"
-
-        msg_box.setText(text)
-        msg_box.setWindowTitle("Заказ")
-        msg_box.exec()
-
-    @pyqtSlot()
-    def on_complete(self):
-        msg_box = QMessageBox()
-        text = "Список:\n" if len(self._model.cart) else "Список пуст"
-
-        for good_id in self._model.cart:
-            text += self._model.get_good_by_id(good_id)['Наименование'] + "\n"
+            text += self._model.get_good_by_id(good_id)['title'] + "\n"
 
         msg_box.setText(text)
         msg_box.setWindowTitle("Заказ")

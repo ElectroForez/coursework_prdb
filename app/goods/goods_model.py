@@ -13,7 +13,7 @@ class GoodsModel(QObject):
         super().__init__()
         self.db = db
         self._filter_good_name = ""
-        self._sort_field = '"Код товара"'
+        self._sort_field = '"id"'
         self._sort_type = "ASC"
         self._goods_type = ""
         self._limit = 6
@@ -27,17 +27,17 @@ class GoodsModel(QObject):
         good = self.get_good_by_id(good_id)
 
         if good_id not in self._cart:
-            if not good["Оставшееся кол-во"]:
+            if not good["remaining_amount"]:
                 return
             self._cart.append(good_id)
-            self.db.cursor.execute(f'UPDATE товары '
-                                   f'SET "Оставшееся кол-во" = "Оставшееся кол-во" - 1 '
-                                   f'WHERE "Код товара" = {good_id}')
+            self.db.cursor.execute(f'UPDATE goods '
+                                   f'SET "remaining_amount" = "remaining_amount" - 1 '
+                                   f'WHERE "id" = {good_id}')
         else:
             self._cart.remove(good_id)
-            self.db.cursor.execute(f'UPDATE товары '
-                                   f'SET "Оставшееся кол-во" = "Оставшееся кол-во" + 1 '
-                                   f'WHERE "Код товара" = {good_id}')
+            self.db.cursor.execute(f'UPDATE goods '
+                                   f'SET "remaining_amount" = "remaining_amount" + 1 '
+                                   f'WHERE "id" = {good_id}')
         self.db.connection.commit()
         self.goods = self.get_goods()
         self.cart_changed.emit()
@@ -109,24 +109,25 @@ class GoodsModel(QObject):
         self.goods = self.get_goods()
 
     def get_all_goods(self):
-        self.db.cursor.execute('SELECT * FROM товары')
+        self.db.cursor.execute('SELECT * FROM goods')
 
         result = self.db.cursor.fetchall()
         return result
 
     def get_goods(self):
         self.db.cursor.execute(f'select * '
-                               f'from товары '
+                               f'from goods '
                                f'WHERE '
-                               f'"Наименование" LIKE \'%{self._filter_good_name}%\' '
+                               f'"title" LIKE \'%{self._filter_good_name}%\' '
                                f'AND '
-                               f'"Категория" LIKE \'%{self._goods_type}%\''
+                               f'"category" LIKE \'%{self._goods_type}%\''
                                f'ORDER BY {self._sort_field} {self._sort_type} '
                                f'LIMIT {self._limit} '
                                f'OFFSET {self._offset}'
                                )
         result = self.db.cursor.fetchall()
         return result
+
 
     def get_good_by_id(self, good_id):
         self.db.cursor.execute(f'select * '

@@ -22,9 +22,9 @@ class GoodsController(QObject):
     @pyqtSlot(str)
     def sort_field_change(self, value):
         if value == "Имя":
-            self._model.sort_field = '"Наименование"'
+            self._model.sort_field = '"title"'
         if value == "Цена":
-            self._model.sort_field = '"Стоимость, руб. за час"'
+            self._model.sort_field = '"cost_per_hour"'
 
     @pyqtSlot(str)
     def good_type_change(self, value):

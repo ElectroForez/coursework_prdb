@@ -13,7 +13,7 @@ class AddGoodModel(QObject):
         self.db = db
 
     def get_last_good_id(self):
-        self.db.cursor.execute('SELECT MAX("Код товара") FROM товары')
+        self.db.cursor.execute('SELECT MAX("id") FROM goods')
         result = self.db.cursor.fetchone()['max']
         return result
 
@@ -23,7 +23,7 @@ class AddGoodModel(QObject):
 
         good['id'] = self.get_last_good_id() + 1
 
-        db.cursor.execute(f'insert into товары '                          
+        db.cursor.execute(f'insert into goods '
                           f'VALUES '
                           f'('
                           f'%s, %s, %s, %s, %s, %s, %s, %s'
@@ -40,28 +40,3 @@ class AddGoodModel(QObject):
                           )
         )
         self.good_added.emit()
-
-        # db.cursor.execute(f'insert into заказы '
-        #                   f'('
-        #                   f'"Код заказа", '
-        #                   f'"Дата создания", '
-        #                   f'"Время заказа", '
-        #                   f'"Код клиента", '
-        #                   f'"Cтатус", '
-        #                   f'"Время проката", '
-        #                   f'"Код сотрудника"'
-        #                   f')'
-        #                   f'VALUES '
-        #                   f'('
-        #                   f'%s, %s, %s, %s, %s, %s, %s'
-        #                   f')',
-        #                   (
-        #                   order['id'],
-        #                   order['date_created'],
-        #                   order['time_created'],
-        #                   order['client_id'],
-        #                   order['status'],
-        #                   order['arenda_hours'],
-        #                   order['employer_id'],
-        #                   )
-        # )

@@ -33,8 +33,8 @@ class AuthorizeModel(QObject):
         return candidate
 
     def add_to_history(self, login, input_type, time):
-        db.simple_cursor.execute(f'INSERT INTO история_входа '
-                         f'("Логин", "Тип входа", "Время входа") '
+        db.simple_cursor.execute(f'INSERT INTO login_history '
+                         f'("login", "entry_type", "entry_time") '
                          f'VALUES (%s, %s, %s)',
                          (
                              login,

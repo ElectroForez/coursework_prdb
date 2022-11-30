@@ -44,31 +44,31 @@ class CreateOrderModel(QObject):
         self.order_exists.emit(bool(candidate))
 
     def get_last_order_id(self):
-        db.cursor.execute('SELECT MAX("Код заказа") FROM заказы')
+        db.cursor.execute('SELECT MAX("id") FROM orders')
         result = db.cursor.fetchone()['max']
         return result
 
     def get_order_by_id(self, id):
-        db.cursor.execute('SELECT * FROM заказы WHERE "Код заказа" = %s', (id,))
+        db.cursor.execute('SELECT * FROM id WHERE "id" = %s', (id,))
         result = db.cursor.fetchone()
         return result
 
     def get_good_by_id(self, good_id):
         db.cursor.execute(f'select * '
-                               f'from товары '
+                               f'from goods '
                                f'WHERE '
-                               f'"Код товара" = {good_id}'
+                               f'"id" = {good_id}'
                                )
         result = db.cursor.fetchone()
         return result
 
     def get_clients(self):
-        db.cursor.execute(f'select * from клиенты')
+        db.cursor.execute(f'select * from clients')
         result = db.cursor.fetchall()
         return result
 
     def get_client_by_fullname(self, fullname):
-        db.cursor.execute(f'select * from клиенты '
+        db.cursor.execute(f'select * from clients '
                           f'WHERE "ФИО" = \'{fullname}\'')
         result = db.cursor.fetchone()
         return result
@@ -79,19 +79,19 @@ class CreateOrderModel(QObject):
 
         order['date_created'] = datetime.date.today()
         order['time_created'] = datetime.datetime.now().time()
-        order['client_id'] = self.get_client_by_fullname(order['client_fullname'])['Код клиента']
+        order['client_id'] = self.get_client_by_fullname(order['client_fullname'])['id']
         order['status'] = 'В прокате'
-        order['employer_id'] = self.cur_employer["Код сотрудника"]
+        order['employer_id'] = self.cur_employer["id"]
 
-        db.cursor.execute(f'insert into заказы '
+        db.cursor.execute(f'insert into orders '
                           f'('
-                          f'"Код заказа", '
-                          f'"Дата создания", '
-                          f'"Время заказа", '
-                          f'"Код клиента", '
-                          f'"Статус", '
-                          f'"Время проката", '
-                          f'"Код сотрудника"'
+                          f'"id", '
+                          f'"create_datе", '
+                          f'"create_time", '
+                          f'"client_id", '
+                          f'"status", '
+                          f'"arenda_hour_time", '
+                          f'"employer_id"'
                           f')'
                           f'VALUES '
                           f'('
@@ -109,7 +109,7 @@ class CreateOrderModel(QObject):
         )
 
         for good_id in order['cart']:
-            db.cursor.execute("INSERT INTO заказы_товары "
+            db.cursor.execute("INSERT INTO order_goods "
                               "VALUES (%s, %s)", (order['id'], good_id))
 
         self.order_create.emit(order['id'])

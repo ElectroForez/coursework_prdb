@@ -31,24 +31,24 @@ class CloseOrderModel(QObject):
 
         candidate = self.get_order_by_id(self._cur_order)
         self.order_exists.emit(bool(candidate))
-        if candidate and candidate['Cтатус'].startswith('Закрыт'):
+        if candidate and candidate['status'].startswith('Закрыт'):
             self.order_already_close.emit()
 
     def get_order_by_id(self, id):
-        self.db.cursor.execute('SELECT * FROM заказы WHERE "Код заказа" = %s', (id,))
+        self.db.cursor.execute('SELECT * FROM orders WHERE "id" = %s', (id,))
         result = self.db.cursor.fetchone()
         return result
 
     def close_order_by_id(self, order_id):
-        self.db.cursor.execute(f'UPDATE заказы '
-                               f'SET "Cтатус" = \'Закрыт\' '
-                               f'WHERE "Код заказа" = {order_id}')
+        self.db.cursor.execute(f'UPDATE orders '
+                               f'SET "status" = \'Закрыт\' '
+                               f'WHERE "id" = {order_id}')
 
-        self.db.cursor.execute(f'UPDATE товары т '
-                               f'SET "Оставшееся кол-во" = "Оставшееся кол-во" + 1 '
-                               f'WHERE "Код товара" IN '
-                               f'(SELECT "Код товара" FROM заказы_товары зт '
-                               f'WHERE "Код заказа" = {order_id})')
+        self.db.cursor.execute(f'UPDATE goods '
+                               f'SET "remaining_amount" = "remaining_amount" + 1 '
+                               f'WHERE "id" IN '
+                               f'(SELECT "id" FROM order_goods зт '
+                               f'WHERE "order_id" = {order_id})')
         self.db.connection.commit()
 
         self.order_close.emit(order_id)

@@ -21,12 +21,12 @@ class LoginHistoryModel(QObject):
         self.history_changed.emit()
 
     def get_history_from_db(self):
-        db.cursor.execute("SELECT * FROM история_входа")
+        db.cursor.execute("SELECT * FROM login_history")
         result = self.db.cursor.fetchall()
         return result
 
     def get_history_by_login(self, login):
-        db.cursor.execute("SELECT * FROM история_входа "
-                          f"WHERE Логин LIKE '%{login}%'")
+        db.cursor.execute("SELECT * FROM login_history "
+                          f"WHERE login LIKE '%{login}%'")
         result = self.db.cursor.fetchall()
         return result

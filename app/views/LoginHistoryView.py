@@ -35,7 +35,7 @@ class LoginHistoryView(QWidget):
             return
         table.setColumnCount(len(history[0]))
         table.setRowCount(len(history))
-        table.setHorizontalHeaderLabels(history[0].keys())
+        table.setHorizontalHeaderLabels(['Логин', 'Тип входа', 'Время', 'id'])
         for i in range(len(history)):
             row = history[i]
             for j in range(len(row)):

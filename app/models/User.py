@@ -12,16 +12,16 @@ class UserModel:
         return self.get_users()
 
     def get_users(self):
-        self.db.cursor.execute("SELECT * FROM сотрудники")
+        self.db.cursor.execute("SELECT * FROM employers")
         result = self.db.cursor.fetchall()
         return result
 
     def get_user(self, login, password):
-        self.db.cursor.execute(f'SELECT * FROM сотрудники '
+        self.db.cursor.execute(f'SELECT * FROM employers '
                                f'WHERE '
-                               f'Логин = %s '
+                               f'login = %s '
                                f'AND '
-                               f'Пароль = %s',
+                               f'password = %s',
                                (
                                    login,
                                    password

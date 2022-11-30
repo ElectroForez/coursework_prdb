@@ -31,8 +31,8 @@ class PersonalAccountView(QMainWindow):
         # self._ui.create_order_btn.clicked.connect(self._controller)
 
     def init_data(self):
-        fio = self._model.user['ФИО']
-        position = self._model.user['Должность']
+        fio = self._model.user['fullname']
+        position = self._model.user['position']
 
         lastname = fio.split()[0]
         photo = QPixmap(f"./img/{lastname}.jpeg")
