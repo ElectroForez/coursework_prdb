@@ -128,12 +128,11 @@ class GoodsModel(QObject):
         result = self.db.cursor.fetchall()
         return result
 
-
     def get_good_by_id(self, good_id):
         self.db.cursor.execute(f'select * '
-                               f'from товары '
+                               f'from goods '
                                f'WHERE '
-                               f'"Код товара" = {good_id}'
+                               f'"id" = {good_id}'
                                )
         result = self.db.cursor.fetchone()
         return result

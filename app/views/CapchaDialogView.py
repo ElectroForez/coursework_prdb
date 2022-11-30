@@ -77,5 +77,5 @@ class CapchaDialogView(QWidget):
         msg_box = QMessageBox()
         msg_box.setText("Неверно введённая капча. Возможность входа заблокирована на 10 секунд")
         msg_box.setIcon(QMessageBox.Critical)
-        msg_box.setWindowTitle("СТОЙ! СТРЕЛЯТЬ БУДУ!")
+        msg_box.setWindowTitle("ОЙ, ОЙ. БЕДА")
         msg_box.exec()

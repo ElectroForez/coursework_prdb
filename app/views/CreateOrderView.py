@@ -77,7 +77,6 @@ class CreateOrderView(QWidget):
 
     @pyqtSlot(int)
     def on_created_order(self, order_id):
-        self.print_pdf()
         msg_box = QMessageBox()
         msg_box.setText(f"Заказ с номером {order_id} сформирован")
         msg_box.setWindowTitle("Успешно")
@@ -107,25 +106,3 @@ class CreateOrderView(QWidget):
         self._ui.total_value_lbl.setText(str(total_sum) + " руб.")
         # table.resizeColumnsToContents()
         table.setSortingEnabled(True)
-
-    def print_pdf(self):
-        text = f"""
-Номер заказа: {self._ui.order_id_edit.text()}
-Клиент: {self._ui.client_box.currentText()}
-Количество часов проката: {self._ui.hours_count_box.text()}
-        
-Список товаров:
-        
-"""
-        cart = self._model.cart
-        cart_text = ""
-        for good_id in cart:
-            good = self._model.get_good_by_id(good_id)
-            cart_text += f"{good['title']}, {good['cost_per_hour']} руб.)\n"
-        text += cart_text
-
-        text += f"Итого: {self._ui.total_value_lbl.text()}"
-        text = text.replace('\n', '\n    ')
-        label = QLabel(text)
-        label.setStyleSheet('background-color: #FFF')
-        print_widget(label, os.path.join('../res/reports/', f'{self._ui.order_id_edit.text()}.pdf'))

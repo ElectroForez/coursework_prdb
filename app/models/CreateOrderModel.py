@@ -49,7 +49,7 @@ class CreateOrderModel(QObject):
         return result
 
     def get_order_by_id(self, id):
-        db.cursor.execute('SELECT * FROM id WHERE "id" = %s', (id,))
+        db.cursor.execute('SELECT * FROM orders WHERE "id" = %s', (id,))
         result = db.cursor.fetchone()
         return result
 
@@ -69,7 +69,7 @@ class CreateOrderModel(QObject):
 
     def get_client_by_fullname(self, fullname):
         db.cursor.execute(f'select * from clients '
-                          f'WHERE "ФИО" = \'{fullname}\'')
+                          f'WHERE "fullname" = \'{fullname}\'')
         result = db.cursor.fetchone()
         return result
 
@@ -86,7 +86,7 @@ class CreateOrderModel(QObject):
         db.cursor.execute(f'insert into orders '
                           f'('
                           f'"id", '
-                          f'"create_datе", '
+                          f'"create_date", '
                           f'"create_time", '
                           f'"client_id", '
                           f'"status", '
@@ -113,3 +113,12 @@ class CreateOrderModel(QObject):
                               "VALUES (%s, %s)", (order['id'], good_id))
 
         self.order_create.emit(order['id'])
+        return True
+
+    def get_cart_total_price(self, hours):
+        total_price = 0
+        for good_id in self.cart:
+            good = self.get_good_by_id(good_id)
+            total_price += good['cost_per_hour'] * hours
+
+        return total_price
