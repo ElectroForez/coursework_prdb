@@ -103,7 +103,7 @@ class GoodsView(QWidget):
         value = str(value)
         widget = QWidget()
         layout = QHBoxLayout()
-        layout.addWidget(QLabel(name))
+        layout.addWidget(QLabel(name + ":"))
         layout.addWidget(QLabel(value))
         widget.setLayout(layout)
         return widget

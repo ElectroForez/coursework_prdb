@@ -1,4 +1,5 @@
 import os.path
+import shutil
 
 from PyQt5.QtCore import pyqtSlot, Qt, QRegExp
 from PyQt5.QtGui import QRegExpValidator
@@ -43,9 +44,11 @@ class AddGoodView(QWidget):
 
     @pyqtSlot()
     def choice_img(self):
-        file_name, _ = QFileDialog.getOpenFileName(self, "Выберите изображение", "",
+        filename, _ = QFileDialog.getOpenFileName(self, "Выберите изображение", "",
                                                   "png (*.png);;jpeg (*.jpg);;All Files (*);;")
-        self._ui.imgname_edit.setText(os.path.relpath(file_name))
+        basename = os.path.basename(filename)
+        shutil.copy(filename, os.path.join('img/', basename))
+        self._ui.imgname_edit.setText(basename)
 
     @pyqtSlot()
     def on_add_good_click(self):

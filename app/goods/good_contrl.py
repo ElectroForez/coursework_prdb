@@ -23,7 +23,7 @@ class GoodsController(QObject):
     def sort_field_change(self, value):
         if value == "Имя":
             self._model.sort_field = '"title"'
-        if value == "Цена":
+        elif value == "Цена":
             self._model.sort_field = '"cost_per_hour"'
 
     @pyqtSlot(str)
@@ -35,14 +35,14 @@ class GoodsController(QObject):
 
     @pyqtSlot()
     def next_click(self):
-        if self._model.offset + self._model.limit > len(self._model.get_goods()):
-            return
-        else:
-            self._model.offset += self._model.limit
+        self._model.offset += self._model.limit
+        goods_len = len(self._model.get_goods())
+        if not goods_len:
+            self._model.offset -= self._model.limit
 
     @pyqtSlot()
     def prev_click(self):
-        if self._model.offset - self._model.limit < 0:
+        if (self._model.offset - self._model.limit) < 0:
             self._model.offset = 0
         else:
             self._model.offset -= self._model.limit
