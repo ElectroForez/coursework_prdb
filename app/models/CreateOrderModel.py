@@ -6,7 +6,6 @@ from models.Db import db
 
 
 class CreateOrderModel(QObject):
-
     order_changed = pyqtSignal(int)
     order_exists = pyqtSignal(bool)
     order_create = pyqtSignal(int)
@@ -15,6 +14,7 @@ class CreateOrderModel(QObject):
 
     def __init__(self, cur_employer=None):
         super().__init__()
+        self.db = db
         self._cur_order = self.get_last_order_id() + 1
         self._cart = []
         self.cur_employer = cur_employer
@@ -44,33 +44,33 @@ class CreateOrderModel(QObject):
         self.order_exists.emit(bool(candidate))
 
     def get_last_order_id(self):
-        db.cursor.execute('SELECT MAX("id") FROM orders')
-        result = db.cursor.fetchone()['max']
+        self.db.cursor.execute('SELECT MAX("id") FROM orders')
+        result = self.db.cursor.fetchone()['max']
         return result
 
     def get_order_by_id(self, id):
-        db.cursor.execute('SELECT * FROM orders WHERE "id" = %s', (id,))
-        result = db.cursor.fetchone()
+        self.db.cursor.execute('SELECT * FROM orders WHERE "id" = %s', (id,))
+        result = self.db.cursor.fetchone()
         return result
 
     def get_good_by_id(self, good_id):
-        db.cursor.execute(f'select * '
+        self.db.cursor.execute(f'select * '
                                f'from goods '
                                f'WHERE '
                                f'"id" = {good_id}'
                                )
-        result = db.cursor.fetchone()
+        result = self.db.cursor.fetchone()
         return result
 
     def get_clients(self):
-        db.cursor.execute(f'select * from clients')
-        result = db.cursor.fetchall()
+        self.db.cursor.execute(f'select * from clients')
+        result = self.db.cursor.fetchall()
         return result
 
     def get_client_by_fullname(self, fullname):
-        db.cursor.execute(f'select * from clients '
-                          f'WHERE "fullname" = \'{fullname}\'')
-        result = db.cursor.fetchone()
+        self.db.cursor.execute(f'select * from clients '
+                               f'WHERE "fullname" = \'{fullname}\'')
+        result = self.db.cursor.fetchone()
         return result
 
     def create_order(self, order):
@@ -83,34 +83,37 @@ class CreateOrderModel(QObject):
         order['status'] = 'В прокате'
         order['employer_id'] = self.cur_employer["id"]
 
-        db.cursor.execute(f'insert into orders '
-                          f'('
-                          f'"id", '
-                          f'"create_date", '
-                          f'"create_time", '
-                          f'"client_id", '
-                          f'"status", '
-                          f'"arenda_hour_time", '
-                          f'"employer_id"'
-                          f')'
-                          f'VALUES '
-                          f'('
-                          f'%s, %s, %s, %s, %s, %s, %s'
-                          f')',
-                          (
-                          order['id'],
-                          order['date_created'],
-                          order['time_created'],
-                          order['client_id'],
-                          order['status'],
-                          order['arenda_hours'],
-                          order['employer_id'],
-                          )
-        )
+        self.db.cursor.execute(f'insert into orders '
+                               f'('
+                               f'"id", '
+                               f'"create_date", '
+                               f'"create_time", '
+                               f'"client_id", '
+                               f'"status", '
+                               f'"arenda_hour_time", '
+                               f'"employer_id"'
+                               f')'
+                               f'VALUES '
+                               f'('
+                               f'%s, %s, %s, %s, %s, %s, %s'
+                               f')',
+                               (
+                                   order['id'],
+                                   order['date_created'],
+                                   order['time_created'],
+                                   order['client_id'],
+                                   order['status'],
+                                   order['arenda_hours'],
+                                   order['employer_id'],
+                               )
+                               )
 
         for good_id in order['cart']:
-            db.cursor.execute("INSERT INTO order_goods "
-                              "VALUES (%s, %s)", (order['id'], good_id))
+            self.db.cursor.execute("INSERT INTO order_goods "
+                                   "VALUES (%s, %s)", (order['id'], good_id))
+            self.db.cursor.execute(f'UPDATE goods '
+                                   f'SET "remaining_amount" = "remaining_amount" - 1 '
+                                   f'WHERE "id" = {good_id}')
 
         self.order_create.emit(order['id'])
         return True

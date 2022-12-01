@@ -59,6 +59,7 @@ class GoodsView(QWidget):
     @pyqtSlot()
     def on_cart_changed(self):
         self._ui.cart_count.setText(str(len(self._model.cart)))
+        self.draw_goods()
 
     def get_good_widget(self, good):
         widget = QWidget()
@@ -79,10 +80,16 @@ class GoodsView(QWidget):
         layout.addWidget(photo_label)
 
         layout.addWidget(self.get_property_layout("Руб/час", good["cost_per_hour"]))
-        layout.addWidget(self.get_property_layout("Осталось", good["remaining_amount"]))
         layout.addWidget(self.get_property_layout("Категория", good["category"]))
 
-        add_to_cart_text = "Добавлено" if good["id"] in self._model.cart else "Добавить в заказ"
+        remaining_amount = good["remaining_amount"]
+        if good["id"] in self._model.cart:
+            remaining_amount -= 1
+            add_to_cart_text = "Добавлено"
+        else:
+            add_to_cart_text = "Добавить в заказ"
+
+        layout.addWidget(self.get_property_layout("Осталось", remaining_amount))
 
         add_to_cart = QPushButton(add_to_cart_text)
         add_to_cart.clicked.connect(lambda: self._controller.add_good(good["id"]))

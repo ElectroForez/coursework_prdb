@@ -30,16 +30,8 @@ class GoodsModel(QObject):
             if not good["remaining_amount"]:
                 return
             self._cart.append(good_id)
-            self.db.cursor.execute(f'UPDATE goods '
-                                   f'SET "remaining_amount" = "remaining_amount" - 1 '
-                                   f'WHERE "id" = {good_id}')
         else:
             self._cart.remove(good_id)
-            self.db.cursor.execute(f'UPDATE goods '
-                                   f'SET "remaining_amount" = "remaining_amount" + 1 '
-                                   f'WHERE "id" = {good_id}')
-        self.db.connection.commit()
-        self.goods = self.get_goods()
         self.cart_changed.emit()
 
     @property
