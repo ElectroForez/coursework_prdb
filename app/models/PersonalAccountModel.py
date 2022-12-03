@@ -12,4 +12,5 @@ class PersonalAccountModel(QObject):
 
     @property
     def user(self):
+        """Текущий пользователь"""
         return self._cur_user
