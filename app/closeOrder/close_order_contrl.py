@@ -10,12 +10,15 @@ class CloseOrderController(QObject):
 
     @pyqtSlot(str)
     def change_order_id(self, id):
+        """поменять номер заказа"""
         self._model.cur_order = id
 
     @pyqtSlot(str)
     def close_order(self, order_id):
+        """закрыть заказ"""
         self._model.close_order_by_id(order_id)
 
     @pyqtSlot()
     def success_close_order(self):
+        """Успешное закрытие заказа"""
         self._view.close()

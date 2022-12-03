@@ -26,6 +26,7 @@ class CapchaDialogView(QWidget):
         self.init_data()
 
     def init_slots(self):
+        """Инициализация слотов"""
         self._ui.generate_new_btn.clicked.connect(self._controller.reload_capcha)
         self._model.capcha_changed.connect(self.draw_capcha)
         self._ui.confirm_button.clicked\
@@ -33,10 +34,12 @@ class CapchaDialogView(QWidget):
         pass
 
     def init_data(self):
+        """Инициализация данных"""
         self.draw_capcha(self._model.capcha)
         pass
 
     def clear_capcha(self):
+        """Очистить капчу"""
         self._ui.capcha_edit.clear()
 
         label = self._ui.capcha_label
@@ -48,6 +51,7 @@ class CapchaDialogView(QWidget):
 
     @pyqtSlot(str)
     def draw_capcha(self, capcha):
+        """Нарисовать капчу"""
         self.clear_capcha()
         painter = QPainter(self._ui.capcha_label.pixmap())
         font_size = 25
@@ -74,6 +78,7 @@ class CapchaDialogView(QWidget):
         painter.end()
 
     def show_error(self):
+        """Показать ошибку"""
         msg_box = QMessageBox()
         msg_box.setText("Неверно введённая капча. Возможность входа заблокирована на 10 секунд")
         msg_box.setIcon(QMessageBox.Critical)

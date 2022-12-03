@@ -12,11 +12,13 @@ class UserModel:
         return self.get_users()
 
     def get_users(self):
+        """Получить пользователей"""
         self.db.cursor.execute("SELECT * FROM employers")
         result = self.db.cursor.fetchall()
         return result
 
     def get_user(self, login, password):
+        """Получить пользователя по данным для авторизации"""
         self.db.cursor.execute(f'SELECT * FROM employers '
                                f'WHERE '
                                f'login = %s '

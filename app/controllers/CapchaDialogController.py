@@ -11,11 +11,13 @@ class CapchaDialogController(QObject):
 
     @pyqtSlot()
     def reload_capcha(self):
+        """Обновить капчу"""
         capcha = self._model.generate_capcha()
         self._model.capcha = capcha
 
     @pyqtSlot(str)
     def check_capcha(self, value):
+        """Проверить капчу"""
         if self._model.capcha != value:
             self._view.show_error()
             self._view._parent.on_block_auth()

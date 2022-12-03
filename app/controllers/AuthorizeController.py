@@ -14,6 +14,7 @@ class AuthorizeController(QObject):
 
     @pyqtSlot(str, str)
     def authorize(self, login, password):
+        """авторизация"""
         if not (login and password):
             self._view.show_error("Заполните все поля")
             return
@@ -30,6 +31,7 @@ class AuthorizeController(QObject):
 
     @pyqtSlot()
     def create_capcha(self):
+        """Создать капчу"""
         self._view.on_capcha()
 
         from views.CapchaDialogView import CapchaDialogView

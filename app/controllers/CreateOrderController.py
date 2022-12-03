@@ -19,26 +19,31 @@ class CreateOrderController(QObject):
 
     @pyqtSlot(str)
     def change_order_id(self, id):
+        """Изменение текущего ид заказа"""
         self._model.cur_order = id
 
     @pyqtSlot(dict)
     def create_order(self, order):
+        """создать заказ"""
         result = self._model.create_order(order)
         if result:
             self.print_pdf(order)
 
     @pyqtSlot()
     def success_create_order(self):
+        """успешное создание заказа"""
         self._view.close()
 
     @pyqtSlot()
     def add_goods(self):
+        """Добавление товаров"""
         model = GoodsModel(self._model)
         model.cart = self._model.cart
         view = GoodsView(model)
         view.show()
 
     def print_pdf(self, order):
+        """Распечатать чек"""
         text = f"""
 Номер заказа: {order['id']}
 Клиент: {order['client_fullname']}

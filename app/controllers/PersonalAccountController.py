@@ -21,30 +21,35 @@ class PersonalAccountController(QObject):
 
     @pyqtSlot()
     def open_history(self):
+        """Открыть окно с историей входа"""
         model = LoginHistoryModel()
         view = LoginHistoryView(model, self._view)
         view.show()
 
     @pyqtSlot()
     def create_order(self):
+        """Открыть окно с созданием заказа"""
         model = CreateOrderModel(self._model.user)
         view = CreateOrderView(model, self._view)
         view.show()
 
     @pyqtSlot()
     def close_order(self):
+        """Открыть окно с закрытием заказа"""
         model = CloseOrderModel()
         view = CloseOrderView(model, self._view)
         view.show()
 
     @pyqtSlot()
     def add_good(self):
+        """Открыть окно с добавлением товара"""
         model = AddGoodModel()
         view = AddGoodView(model, self._view)
         view.show()
 
     @pyqtSlot()
     def deauth(self):
+        """Деавторизация"""
         from views.AuthorizeView import AuthorizeView  # for avoid circular import
         model = AuthorizeModel()
         view = AuthorizeView(model)
@@ -53,4 +58,5 @@ class PersonalAccountController(QObject):
 
     @pyqtSlot()
     def close(self):
+        """Закрытие экрана"""
         self._view.close()

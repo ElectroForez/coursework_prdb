@@ -35,11 +35,13 @@ class CloseOrderModel(QObject):
             self.order_already_close.emit()
 
     def get_order_by_id(self, id):
+        """Получить заказ по id"""
         self.db.cursor.execute('SELECT * FROM orders WHERE "id" = %s', (id,))
         result = self.db.cursor.fetchone()
         return result
 
     def close_order_by_id(self, order_id):
+        """Закрыть заказ по id"""
         self.db.cursor.execute(f'UPDATE orders '
                                f'SET "status" = \'Закрыт\' '
                                f'WHERE "id" = {order_id}')

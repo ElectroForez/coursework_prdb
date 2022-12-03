@@ -24,6 +24,7 @@ class CapchaDialogModel(QObject):
         self.capcha_changed.emit(self._capcha)
 
     def generate_capcha(self, length=5):
+        """Сгенерировать содержание капчи"""
         vars = string.ascii_letters + string.digits
         capcha = ''.join(random.sample(vars, length))
         return capcha

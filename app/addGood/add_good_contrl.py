@@ -10,8 +10,10 @@ class AddGoodController(QObject):
 
     @pyqtSlot(dict)
     def add_good(self, good):
+        """Добавить товар"""
         self._model.add_good(good)
 
     @pyqtSlot()
     def on_added_good(self):
+        """Слот при успшеном добавлении товара"""
         self._view.close()

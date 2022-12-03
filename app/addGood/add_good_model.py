@@ -13,11 +13,13 @@ class AddGoodModel(QObject):
         self.db = db
 
     def get_last_good_id(self):
+        """Получение id последнего товара"""
         self.db.cursor.execute('SELECT MAX("id") FROM goods')
         result = self.db.cursor.fetchone()['max']
         return result
 
     def add_good(self, good):
+        """Добавить товар в БД1"""
         if '' in (good['title'], good['hour_cost'], good['full_cost'], good['category']):
             return
 

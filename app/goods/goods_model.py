@@ -24,6 +24,7 @@ class GoodsModel(QObject):
         self.createOrderModel = create_order_model
 
     def add_to_cart(self, good_id):
+        """Добавить в корзину"""
         good = self.get_good_by_id(good_id)
 
         if good_id not in self._cart:
@@ -34,6 +35,7 @@ class GoodsModel(QObject):
             self._cart.remove(good_id)
         self.cart_changed.emit()
 
+    # Различные геттеры и сеттеры для свойств
     @property
     def cart(self):
         return self._cart
@@ -101,12 +103,14 @@ class GoodsModel(QObject):
         self.goods = self.get_goods()
 
     def get_all_goods(self):
+        """Получить все товары"""
         self.db.cursor.execute('SELECT * FROM goods')
 
         result = self.db.cursor.fetchall()
         return result
 
     def get_goods(self):
+        """Получить все товары с учётом параметров"""
         self.db.cursor.execute(f'select * '
                                f'from goods '
                                f'WHERE '
@@ -121,6 +125,7 @@ class GoodsModel(QObject):
         return result
 
     def get_good_by_id(self, good_id):
+        """получить товар по id"""
         self.db.cursor.execute(f'select * '
                                f'from goods '
                                f'WHERE '

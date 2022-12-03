@@ -26,6 +26,7 @@ class AuthorizeModel(QObject):
         self._cur_user = value
 
     def verify_credentials(self, login, password):
+        """Проверить данные для входа"""
         candidate = self._user_model.get_user(login, password)
         input_type = 'успешно' if candidate else 'не успешно'
         time = datetime.datetime.now()
@@ -33,6 +34,7 @@ class AuthorizeModel(QObject):
         return candidate
 
     def add_to_history(self, login, input_type, time):
+        """Добавить попытку в историю входа"""
         db.simple_cursor.execute(f'INSERT INTO login_history '
                          f'("login", "entry_type", "entry_time") '
                          f'VALUES (%s, %s, %s)',
@@ -42,6 +44,7 @@ class AuthorizeModel(QObject):
                              time
                          ))
 
+    # номер попытки авторизоваться
     @property
     def try_auth(self):
         return self._try_auth

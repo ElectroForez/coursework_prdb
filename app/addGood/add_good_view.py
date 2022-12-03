@@ -28,12 +28,14 @@ class AddGoodView(QWidget):
         self.init_data()
 
     def init_slots(self):
+        """Инициализировать слоты"""
         self._ui.choice_img_btn.clicked.connect(self.choice_img)
         self._ui.add_btn.clicked.connect(self.on_add_good_click)
         self._model.good_added.connect(self._controller.on_added_good)
         pass
 
     def init_data(self):
+        """Инициализировать начальные данные"""
         stu_id_regx = QRegExp('^[0-9]{10}$')
         stu_id_validator = QRegExpValidator(stu_id_regx, self._ui.cost_hour_edit)
         self._ui.cost_hour_edit.setValidator(stu_id_validator)
@@ -44,6 +46,7 @@ class AddGoodView(QWidget):
 
     @pyqtSlot()
     def choice_img(self):
+        """Выбрать изображение"""
         filename, _ = QFileDialog.getOpenFileName(self, "Выберите изображение", "",
                                                   "png (*.png);;jpeg (*.jpg);;All Files (*);;")
         basename = os.path.basename(filename)
@@ -52,6 +55,7 @@ class AddGoodView(QWidget):
 
     @pyqtSlot()
     def on_add_good_click(self):
+        """Слот для добавления товара"""
         good = dict()
         good['title'] = self._ui.title_edit.text()
         good['hour_cost'] = self._ui.cost_hour_edit.text()
@@ -62,4 +66,3 @@ class AddGoodView(QWidget):
         good['count'] = self._ui.count_box.text().split()[0]
 
         self._controller.add_good(good)
-

@@ -24,10 +24,11 @@ class GoodsView(QWidget):
         self.init_data()
 
     def init_slots(self):
+        """Инициализация слотов"""
         self._model.goods_changed.connect(self.on_goods_change)
         self._ui.sort_type_box.currentTextChanged.connect(self._controller.sort_type_change)
         self._ui.field_box.currentTextChanged.connect(self._controller.sort_field_change)
-        self._ui.type_box.currentTextChanged.connect(self._controller.good_type_change)
+        self._ui.type_box.currentTextChanged.connect(self._controller.good_category_change)
         self._ui.next_btn.clicked.connect(self._controller.next_click)
         self._ui.prev_btn.clicked.connect(self._controller.prev_click)
         self._ui.goods_name_edit.textChanged.connect(self._controller.good_name_change)
@@ -36,14 +37,17 @@ class GoodsView(QWidget):
         self._ui.create_order.clicked.connect(self._controller.complete)
 
     def init_data(self):
+        """Инициализация данных"""
         self.draw_goods()
         self.on_cart_changed()
 
     @pyqtSlot()
     def on_goods_change(self):
+        """слот для изменения товаров"""
         self.draw_goods()
 
     def draw_goods(self):
+        """Отрисовка товаров"""
         for i in reversed(range(self._ui.goodsGrid.count())):
             self._ui.goodsGrid.itemAt(i).widget().setParent(None)
 
@@ -58,10 +62,12 @@ class GoodsView(QWidget):
 
     @pyqtSlot()
     def on_cart_changed(self):
+        """Слот для изменений в корзине"""
         self._ui.cart_count.setText(str(len(self._model.cart)))
         self.draw_goods()
 
     def get_good_widget(self, good):
+        """Получить виджет товара"""
         widget = QWidget()
         widget.setMaximumSize(270, 270)
 
@@ -100,6 +106,10 @@ class GoodsView(QWidget):
         return widget
 
     def get_property_layout(self, name, value):
+        """
+        Контейнер для горизонтального
+        отображения свойства и его значения
+        """
         value = str(value)
         widget = QWidget()
         layout = QHBoxLayout()
@@ -110,6 +120,7 @@ class GoodsView(QWidget):
 
     @pyqtSlot()
     def on_see_cart(self):
+        """При клике на просмотр корзины"""
         msg_box = QMessageBox()
         text = "Список:\n" if len(self._model.cart) else "Список пуст"
 

@@ -23,11 +23,13 @@ class LoginHistoryView(QWidget):
         self.draw_history()
 
     def init_slots(self):
+        """Инициализация слотов"""
         self._model.history_changed.connect(self.on_change_history)
         self._ui.filter_edit.textChanged\
             .connect(lambda: self._controller.filter_by_login(self._ui.filter_edit.text()))
 
     def draw_history(self):
+        """Отрисовывание истории входа"""
         history = self._model.history
         table = self._ui.history_table
         table.clearContents()
@@ -46,4 +48,5 @@ class LoginHistoryView(QWidget):
 
     @pyqtSlot()
     def on_change_history(self):
+        """При изменении истории входа"""
         self.draw_history()

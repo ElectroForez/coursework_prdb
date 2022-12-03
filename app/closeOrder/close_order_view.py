@@ -27,6 +27,7 @@ class CloseOrderView(QWidget):
         self.init_data()
 
     def init_slots(self):
+        """Инициализация слотов"""
         self._ui.order_id_edit.textChanged.connect(self._controller.change_order_id)
         self._model.order_empty.connect(self.on_order_empty)
         self._model.order_exists.connect(self.on_order_exists)
@@ -37,12 +38,14 @@ class CloseOrderView(QWidget):
             .connect(self.on_created_order)
 
     def init_data(self):
+        """Инициализация данных"""
         stu_id_regx = QRegExp('^[0-9]{10}$')
         stu_id_validator = QRegExpValidator(stu_id_regx, self._ui.order_id_edit)
         self._ui.order_id_edit.setValidator(stu_id_validator)
 
     @pyqtSlot(bool)
     def on_order_exists(self, order_exists):
+        """Слот на реагирование при существоании или отсутствии заказа"""
         if not order_exists:
             self._ui.info_label.setText("Заказ с таким номером отсутствует")
             self._ui.close_order_btn.setDisabled(True)
@@ -52,16 +55,19 @@ class CloseOrderView(QWidget):
 
     @pyqtSlot()
     def on_order_empty(self):
+        """Слот на регаирование пустого закза"""
         self._ui.info_label.setText("")
         self._ui.close_order_btn.setDisabled(True)
 
     @pyqtSlot()
     def on_order_already_close(self):
+        """Слот на регаирование уже закрытого закза"""
         self._ui.info_label.setText("Заказ уже закрыт")
         self._ui.close_order_btn.setDisabled(True)
 
     @pyqtSlot(str)
     def on_created_order(self, order_id):
+        """Слот на регаирование успешного закрытия заказа"""
         msg_box = QMessageBox()
         msg_box.setText(f"Заказ с номером {order_id} закрыт")
         msg_box.setWindowTitle("Успешно")

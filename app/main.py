@@ -14,6 +14,7 @@ class App(QApplication):
         self.view.show()
 
 
+#  Запускаем приложение
 if __name__ == '__main__':
     app = App(sys.argv)
     sys.exit(app.exec_())

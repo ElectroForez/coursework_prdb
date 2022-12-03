@@ -22,6 +22,7 @@ class PersonalAccountView(QMainWindow):
         self.init_data()
 
     def init_slots(self):
+        """Инициализация слотов"""
         self._ui.see_history.clicked.connect(self._controller.open_history)
         self._ui.create_order_btn.clicked.connect(self._controller.create_order)
         self._ui.deauth_btn.triggered.connect(self._controller.deauth)
@@ -31,6 +32,7 @@ class PersonalAccountView(QMainWindow):
         # self._ui.create_order_btn.clicked.connect(self._controller)
 
     def init_data(self):
+        """Инициализация данных"""
         fio = self._model.user['fullname']
         position = self._model.user['position']
 
@@ -41,11 +43,11 @@ class PersonalAccountView(QMainWindow):
         self._ui.fio_label.setText(fio)
         self._ui.position_label.setText(position)
 
-        # if position != 'Администратор':
-        #     self._ui.see_history.hide()
-        # else:
-        #     self._ui.create_order_btn.hide()
-        #     self._ui.close_order_btn.hide()
-        #
-        # if position != 'Менеджер':
-        #     self._ui.add_good_btn.hide()
+        if position != 'Администратор':
+            self._ui.see_history.hide()
+        else:
+            self._ui.create_order_btn.hide()
+            self._ui.close_order_btn.hide()
+
+        if position != 'Менеджер':
+            self._ui.add_good_btn.hide()

@@ -44,16 +44,19 @@ class CreateOrderModel(QObject):
         self.order_exists.emit(bool(candidate))
 
     def get_last_order_id(self):
+        """Получить номер последнего заказа"""
         self.db.cursor.execute('SELECT MAX("id") FROM orders')
         result = self.db.cursor.fetchone()['max']
         return result
 
     def get_order_by_id(self, id):
+        """Получить заказ по id"""
         self.db.cursor.execute('SELECT * FROM orders WHERE "id" = %s', (id,))
         result = self.db.cursor.fetchone()
         return result
 
     def get_good_by_id(self, good_id):
+        """Получить товар по id"""
         self.db.cursor.execute(f'select * '
                                f'from goods '
                                f'WHERE '
@@ -63,17 +66,20 @@ class CreateOrderModel(QObject):
         return result
 
     def get_clients(self):
+        """Получить клиентов"""
         self.db.cursor.execute(f'select * from clients')
         result = self.db.cursor.fetchall()
         return result
 
     def get_client_by_fullname(self, fullname):
+        """Получить клиента по ФИО"""
         self.db.cursor.execute(f'select * from clients '
                                f'WHERE "fullname" = \'{fullname}\'')
         result = self.db.cursor.fetchone()
         return result
 
     def create_order(self, order):
+        """Создать заказ"""
         if not len(order['cart']):
             return
 
@@ -119,6 +125,7 @@ class CreateOrderModel(QObject):
         return True
 
     def get_cart_total_price(self, hours):
+        """Получить итоговую стоимость содержания корзины"""
         total_price = 0
         for good_id in self.cart:
             good = self.get_good_by_id(good_id)

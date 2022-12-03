@@ -5,8 +5,6 @@ from models.User import UserModel
 
 class PersonalAccountModel(QObject):
 
-    # user_authorized = pyqtSignal(bool)
-
     def __init__(self, user):
         super().__init__()
         self._user_model = UserModel()
