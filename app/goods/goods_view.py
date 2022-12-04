@@ -51,7 +51,7 @@ class GoodsView(QWidget):
         for i in reversed(range(self._ui.goodsGrid.count())):
             self._ui.goodsGrid.itemAt(i).widget().setParent(None)
 
-        goods = self._model.goods[:6]
+        goods = self._model.goods[:self._model.limit]
 
         positions = [(i, j) for i in range(2) for j in range(3)]
 

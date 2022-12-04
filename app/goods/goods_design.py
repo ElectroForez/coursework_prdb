@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'goods/design_form.ui'
+# Form implementation generated from reading ui file 'design_form.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.7
 #
@@ -95,7 +95,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "Формирование заказа"))
         self.goods_name_edit.setPlaceholderText(_translate("Form", "Поиск по названию:"))
         self.sort_type_box.setPlaceholderText(_translate("Form", "Сортировать по:"))
         self.sort_type_box.setItemText(1, _translate("Form", "По возрастанию"))

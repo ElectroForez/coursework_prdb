@@ -56,7 +56,7 @@ class CreateOrderController(QObject):
         cart_text = ""
         for good_id in cart:
             good = self._model.get_good_by_id(good_id)
-            cart_text += f"{good['title']}, {good['cost_per_hour']} руб.)\n"
+            cart_text += f"{good['title']}\t {good['cost_per_hour']} руб.\n"
         text += cart_text
 
         text += f"Итого: {self._model.get_cart_total_price(int(order['arenda_hours']))}"

@@ -31,7 +31,7 @@ class AddGoodView(QWidget):
         """Инициализировать слоты"""
         self._ui.choice_img_btn.clicked.connect(self.choice_img)
         self._ui.add_btn.clicked.connect(self.on_add_good_click)
-        self._model.good_added.connect(self._controller.on_added_good)
+        self._model.good_added.connect(self.on_succesfull_add)
         pass
 
     def init_data(self):
@@ -66,3 +66,12 @@ class AddGoodView(QWidget):
         good['count'] = self._ui.count_box.text().split()[0]
 
         self._controller.add_good(good)
+
+    @pyqtSlot()
+    def on_succesfull_add(self):
+        msg_box = QMessageBox()
+        text = "Товар успешно добавлен"
+        msg_box.setText(text)
+        msg_box.setWindowTitle("Успешно")
+        msg_box.exec()
+        self._controller.on_added_good()

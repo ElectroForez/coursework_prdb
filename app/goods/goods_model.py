@@ -15,7 +15,7 @@ class GoodsModel(QObject):
         self._filter_good_name = ""
         self._sort_field = '"id"'
         self._sort_type = "ASC"
-        self._goods_type = ""
+        self._goods_category = ""
         self._limit = 6
         self._offset = 0
         self._goods = self.get_goods()
@@ -81,12 +81,12 @@ class GoodsModel(QObject):
         self.goods = self.get_goods()
 
     @property
-    def goods_type(self):
-        return self._goods_type
+    def goods_category(self):
+        return self._goods_category
 
-    @goods_type.setter
-    def goods_type(self, value):
-        self._goods_type = value
+    @goods_category.setter
+    def goods_category(self, value):
+        self._goods_category = value
         self.goods = self.get_goods()
 
     @property
@@ -116,7 +116,7 @@ class GoodsModel(QObject):
                                f'WHERE '
                                f'"title" LIKE \'%{self._filter_good_name}%\' '
                                f'AND '
-                               f'"category" LIKE \'%{self._goods_type}%\''
+                               f'"category" LIKE \'%{self._goods_category}%\''
                                f'ORDER BY {self._sort_field} {self._sort_type} '
                                f'LIMIT {self._limit} '
                                f'OFFSET {self._offset}'

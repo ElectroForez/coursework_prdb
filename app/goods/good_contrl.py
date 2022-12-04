@@ -33,9 +33,9 @@ class GoodsController(QObject):
     def good_category_change(self, value):
         """Изменение категории"""
         if value == "Все категории":
-            self._model.goods_type = ""
+            self._model.goods_category = ""
         else:
-            self._model.goods_type = value
+            self._model.goods_category = value
 
     @pyqtSlot()
     def next_click(self):

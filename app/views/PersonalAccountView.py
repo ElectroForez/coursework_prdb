@@ -43,11 +43,11 @@ class PersonalAccountView(QMainWindow):
         self._ui.fio_label.setText(fio)
         self._ui.position_label.setText(position)
 
-        if position != 'Администратор':
-            self._ui.see_history.hide()
-        else:
-            self._ui.create_order_btn.hide()
-            self._ui.close_order_btn.hide()
-
-        if position != 'Менеджер':
-            self._ui.add_good_btn.hide()
+        # if position != 'Администратор':
+        #     self._ui.see_history.hide()
+        # else:
+        #     self._ui.create_order_btn.hide()
+        #     self._ui.close_order_btn.hide()
+        #
+        # if position != 'Менеджер':
+        #     self._ui.add_good_btn.hide()

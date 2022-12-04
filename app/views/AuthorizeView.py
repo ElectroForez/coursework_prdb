@@ -28,8 +28,8 @@ class AuthorizeView(QMainWindow):
     def init_data(self):
         """Инициализация данных"""
         pass
-        # self._ui.login_edit.setText("fedorov@namecomp.ru")
-        # self._ui.pass_edit.setText("8ntwUp")
+        self._ui.login_edit.setText("fedorov@namecomp.ru")
+        self._ui.pass_edit.setText("8ntwUp")
 
     def show_error(self, text):
         """Показать ошибку"""
