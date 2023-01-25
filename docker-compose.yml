@@ -1,0 +1,32 @@
+version: '3.0'
+
+services:
+  app:
+    build: .
+    restart: always
+    hostname: app
+    environment:
+      DISPLAY: "$DISPLAY"
+      DB_NAME: coursework
+      DB_USER: app
+      DB_PASS: root
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    depends_on:
+      - postgres
+    command: /bin/bash startup.sh
+
+  postgres:
+    hostname: postgres
+    image: postgres:14
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_DB: coursework
+      PG_DATA: /var/lib/postgresql/data
+      POSTGRES_PASSWORD: root
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5433:5432"
+    restart: always
