@@ -1,8 +1,8 @@
 from PyQt5.QtCore import pyqtSlot, QTimer, Qt
 from PyQt5.QtWidgets import QMainWindow, QLineEdit, QMessageBox
-from views.authorizeDesign import Ui_MainWindow
 
 from controllers.AuthorizeController import AuthorizeController
+from views.authorizeDesign import Ui_MainWindow
 
 
 class AuthorizeView(QMainWindow):
