@@ -19,4 +19,4 @@ COPY app app
 COPY res res
 COPY startup.sh .
 
-CMD /bin/bash
+CMD /bin/bash startup.sh
