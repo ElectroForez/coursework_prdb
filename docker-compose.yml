@@ -28,8 +28,6 @@ services:
       PG_DATA: /var/lib/postgresql/data
       POSTGRES_PASSWORD: root
       POSTGRES_HOST_AUTH_METHOD: trust
-    ports:
-      - "5433:5432"
     volumes:
       - res:/res
     restart: always
