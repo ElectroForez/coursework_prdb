@@ -2,18 +2,19 @@ version: '3.0'
 
 services:
   app:
-    build: .
-    restart: always
+    image: forez/coursework_app
+    restart: on-failure
     hostname: app
     environment:
       DISPLAY: "$DISPLAY"
       DB_NAME: coursework
-      DB_USER: app
+      DB_USER: admin
       DB_PASS: root
       DB_HOST: postgres
       DB_PORT: 5432
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
+      - res:/home/deploy/res
     depends_on:
       - postgres
     command: /bin/bash startup.sh
@@ -22,11 +23,17 @@ services:
     hostname: postgres
     image: postgres:14
     environment:
-      POSTGRES_USER: app
+      POSTGRES_USER: admin
       POSTGRES_DB: coursework
       PG_DATA: /var/lib/postgresql/data
       POSTGRES_PASSWORD: root
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5433:5432"
+    volumes:
+      - res:/res
     restart: always
+
+volumes:
+  res:
+    driver: local
