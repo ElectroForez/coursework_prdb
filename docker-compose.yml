@@ -2,7 +2,7 @@ version: '3.0'
 
 services:
   app:
-    image: forez/coursework_app
+    image: forez/coursework_app:latest
     restart: on-failure
     hostname: app
     environment:
