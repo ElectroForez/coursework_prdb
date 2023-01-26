@@ -12,7 +12,7 @@ $ psql your_database < res/backup.sql
 ```
 In docker-compose container
 ```
-$ docker-compose exec -T postgres psql -d coursework -U app < res/backup.sql
+$  docker-compose exec postgres /bin/bash -c "psql -U admin -d coursework < /res/backup.sql"
 ```
 
 ## Run
